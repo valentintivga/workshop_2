@@ -8,13 +8,15 @@ class Quiz {
     this.currentQuestionIndex = 0;
     this.showQuestion(this.questions[this.currentQuestionIndex]);
     this.nextButton.addEventListener('click', () => this.nextQuestion());
+    document
+      .getElementById('reset-button')
+      .addEventListener('click', () => window.location.reload());
   }
   //metode ale clasei
   showQuestion(question) {
     this.questionContainer.textContent = question.question;
     this.answerButton.innerHTML = '';
     for (const answer of question.answers) {
-      // const answerElement = `  <li><button class="btn"></button></li>`;
       const buttonContainer = document.createElement('li');
       const buttonElement = document.createElement('button');
       buttonElement.classList.add('btn');
@@ -32,7 +34,7 @@ class Quiz {
     if (correct) {
       this.nextButton.classList.remove('hide');
       this.feedbackButton.textContent = question.explanation;
-      this.feedbackButton.classList.remove('wrong');
+      this.feedbackButton.classList.remove('text-wrong');
       button.classList.add('correct');
       this.feedbackButton.classList.add('this-correct');
     } else {
@@ -46,7 +48,7 @@ class Quiz {
     this.currentQuestionIndex++;
     this.resetQuestion();
     if (this.currentQuestionIndex >= this.questions.lenght) {
-      console.log('Sfarsit quizz');
+      this.showQuiezEndModal;
     } else {
       this.showQuestion(this.questions[this.currentQuestionIndex]);
     }
@@ -56,6 +58,11 @@ class Quiz {
     this.feedbackButton.innerHTML = '';
     this.nextButton.classList.add('hide');
   }
+
+  showQuiezEndModal() {
+    const modalContainer = document.querySelector('.modal-container');
+    modalContainer.classList.remove('hide');
+  }
 }
 
 async function initQuiz() {
@@ -64,4 +71,4 @@ async function initQuiz() {
   console.log(quizQuestions);
   const quiz = new Quiz(quizQuestions);
 }
-initQuiz();
+document.addEventListener('DOMContentLoaded', () => initQuiz());
