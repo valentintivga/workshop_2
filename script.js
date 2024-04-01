@@ -5,7 +5,9 @@ class Quiz {
     this.answerButton = document.getElementById('answer-buttons');
     this.feedbackButton = document.getElementById('feedback-container');
     this.nextButton = document.getElementById('next-button');
-    this.showQuestion(this.questions[0]);
+    this.currentQuestionIndex = 0;
+    this.showQuestion(this.questions[this.currentQuestionIndex]);
+    this.nextButton.addEventListener('click', () => this.nextQuestion());
   }
   //metode ale clasei
   showQuestion(question) {
@@ -19,7 +21,40 @@ class Quiz {
       buttonElement.textContent = answer.text;
       this.answerButton.appendChild(buttonContainer);
       buttonContainer.appendChild(buttonElement);
+      buttonElement.addEventListener('click', () => {
+        this.selctAnswer(answer, question, buttonElement);
+      });
     }
+  }
+
+  selctAnswer(answer, question, button) {
+    const correct = answer.correct;
+    if (correct) {
+      this.nextButton.classList.remove('hide');
+      this.feedbackButton.textContent = question.explanation;
+      this.feedbackButton.classList.remove('wrong');
+      button.classList.add('correct');
+      this.feedbackButton.classList.add('this-correct');
+    } else {
+      button.classList.add('wrong');
+      this.feedbackButton.textContent =
+        'Raspuns incorect. Te rugam sa incerci dinou.';
+      this.feedbackButton.classList.add('text-wrong');
+    }
+  }
+  nextQuestion() {
+    this.currentQuestionIndex++;
+    this.resetQuestion();
+    if (this.currentQuestionIndex >= this.questions.lenght) {
+      console.log('Sfarsit quizz');
+    } else {
+      this.showQuestion(this.questions[this.currentQuestionIndex]);
+    }
+  }
+  resetQuestion() {
+    this.feedbackButton.classList.remove('text-correct', 'text-wrong');
+    this.feedbackButton.innerHTML = '';
+    this.nextButton.classList.add('hide');
   }
 }
 
